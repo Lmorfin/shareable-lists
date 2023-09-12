@@ -3,7 +3,7 @@ const getUrlEndpoint = () => {
   if (env === "local") {
     url = "http://localhost:4000";
   } else {
-    url = "https://morfincloud.xyz";
+    url = "http://morfincloud.xyz:4000";
   }
   return url;
 };
