@@ -48,59 +48,6 @@ const SharedUrl = () => {
   };
 
   return (
-    // <div>
-    // {posts.map((post) => (
-    //   <div key={post.id}>
-    //     <ul>
-    //       <h3>{post.title}</h3>
-    //     </ul>
-    //   </div>
-    // ))}
-
-    // {bp.map((post) => (
-    //   <div key={post}>
-    //     <ul>
-    //       <li>{post}</li>
-    //     </ul>
-    //   </div>
-    // ))}
-    // </div>
-
-    // <Card>
-    //   <CardHeader>
-    //     <Heading>
-    //       {posts.map((post) => (
-    //         <span key={post.id}>{createdDate}</span>
-    //       ))}
-    //     </Heading>
-    //   </CardHeader>
-
-    //   <CardBody>
-    //     <Stack divider={<StackDivider />} spacing="4">
-
-    // {posts.map((post) => (
-    //   <div key={post.id}>
-    //     <Heading>
-    //       {posts.map((post) => (
-    //         <Text key={post.id}>{post.title}</Text>
-    //       ))}
-    //     </Heading>
-    //   </div>
-    // ))}
-
-    //       {bp.map((post) => (
-    //         <Box key={post}>
-    //           <Text>{post}</Text>
-    //         </Box>
-    //       ))}
-
-    // <Link to="/">
-    //   <Button>Create a new List</Button>
-    // </Link>
-    //     </Stack>
-    //   </CardBody>
-    // </Card>
-
     <Box shadow="md" align="center" className="url-list-container">
       <Stack className="list-container" h="100vh" spacing={3}>
         <Center>
