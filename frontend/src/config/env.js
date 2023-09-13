@@ -3,7 +3,7 @@ const getUrlEndpoint = () => {
   if (env === "local") {
     url = "http://localhost:4000";
   } else {
-    url = "http://morfincloud.xyz:4000";
+    url = "https://sharelist-backend.onrender.com";
   }
   return url;
 };
