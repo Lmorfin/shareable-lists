@@ -7,9 +7,17 @@ import {
   Stack,
   Button,
   VStack,
-  Center,
+  Container,
+  useToast,
+  Icon,
+  Flex,
+  Divider,
+  Badge,
+  useColorModeValue,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { FiShare2, FiEdit2, FiPlus } from "react-icons/fi";
 
 const SharedUrl = () => {
   const [posts, setPosts] = useState([]);
@@ -18,6 +26,21 @@ const SharedUrl = () => {
   const currentURL = window.location.href;
   const splitURL = currentURL.split("/api/lists/");
   const uniqueIdentifier = splitURL[1];
+  const toast = useToast();
+
+  // Dark theme colors
+  const bgColor = useColorModeValue("gray.800", "gray.900");
+  const cardBg = useColorModeValue("gray.700", "gray.800");
+  const textColor = useColorModeValue("white", "gray.100");
+  const itemBg = useColorModeValue("gray.600", "gray.700");
+  const borderColor = useColorModeValue("gray.600", "gray.700");
+  const hoverBg = useColorModeValue("gray.600", "gray.600");
+
+  // Responsive styles
+  const containerPadding = useBreakpointValue({ base: 4, md: 8 });
+  const headingSize = useBreakpointValue({ base: "md", md: "lg" });
+  const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
+  const textSize = useBreakpointValue({ base: "sm", md: "md" });
 
   useEffect(() => {
     fetchListData();
@@ -27,18 +50,20 @@ const SharedUrl = () => {
     await listService
       .fetchList(uniqueIdentifier)
       .then((res) => {
-        console.log(res);
-        console.log("Title:", res.data[0].title);
-        console.log("work?", formatDate(res.data[0].created_at));
         SetCreatedDate(formatDate(res.data[0].created_at));
         setPosts([res.data[0]]);
         setBp(res.data[0].bulletpoints);
       })
       .catch((err) => {
+        toast({
+          title: "Error",
+          description: "Failed to fetch list data",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         console.log(err);
       });
-
-    console.log(posts);
   };
 
   const formatDate = (inputDate) => {
@@ -47,54 +72,113 @@ const SharedUrl = () => {
     return date.toLocaleDateString("en-US", options);
   };
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link copied!",
+      description: "Share this link with others",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
   return (
-    <Box shadow="md" align="center" className="url-list-container">
-      <Stack className="list-container" h="100vh" spacing={3}>
-        <Center>
-          <Text fontWeight="bold" fontSize="lg">
+    <Box bg={bgColor} minH="100vh" py={4}>
+      <Container maxW="container.md" px={containerPadding}>
+        <Box
+          shadow="2xl"
+          borderRadius="xl"
+          p={containerPadding}
+          bg={cardBg}
+          borderWidth="1px"
+          borderColor={borderColor}
+        >
+          <VStack spacing={6} align="stretch">
             {posts.map((post) => (
-              <div key={post.id}>
-                <Heading>
-                  {posts.map((post) => (
-                    <Text key={post.id}>{post.title}</Text>
-                  ))}
-                </Heading>
-              </div>
+              <Box key={post.id}>
+                <Flex
+                  justify="space-between"
+                  align="center"
+                  mb={2}
+                  direction={{ base: "column", sm: "row" }}
+                  gap={2}
+                >
+                  <Heading size={headingSize} color="blue.300">
+                    {post.title}
+                  </Heading>
+                  <Badge colorScheme="blue" fontSize={textSize} bg="blue.500">
+                    Created {createdDate}
+                  </Badge>
+                </Flex>
+              </Box>
             ))}
-          </Text>
-        </Center>
 
-        <VStack spacing={2}>
-          {bp.map((item) => (
-            <Text key={item.id} fontSize="md">
-              {item}
-            </Text>
-          ))}
-        </VStack>
-        <Stack>
-          <Center>
-            <Button width={280} mt={25}>
-              Share List
-            </Button>
-          </Center>
+            <Divider borderColor={borderColor} />
 
-          <Center>
-            <Link to={`/api/update/${uniqueIdentifier}`}>
-              <Button width={280} mt={25}>
-                Edit List
+            <VStack spacing={4} align="stretch">
+              {bp.map((item, index) => (
+                <Box
+                  key={index}
+                  p={4}
+                  bg={itemBg}
+                  borderRadius="md"
+                  borderWidth="1px"
+                  borderColor={borderColor}
+                  _hover={{ bg: hoverBg }}
+                >
+                  <Text fontSize={textSize} color={textColor}>
+                    {item}
+                  </Text>
+                </Box>
+              ))}
+            </VStack>
+
+            <Stack spacing={4} mt={8}>
+              <Button
+                leftIcon={<Icon as={FiShare2} />}
+                onClick={handleShare}
+                colorScheme="blue"
+                size={buttonSize}
+                width="100%"
+                bg="blue.500"
+                _hover={{ bg: "blue.600" }}
+              >
+                Share List
               </Button>
-            </Link>
-          </Center>
 
-          <Center>
-            <Link to="/">
-              <Button width={280} mt={25}>
-                Create a new List
-              </Button>
-            </Link>
-          </Center>
-        </Stack>
-      </Stack>
+              <Link
+                to={`/api/update/${uniqueIdentifier}`}
+                style={{ width: "100%" }}
+              >
+                <Button
+                  leftIcon={<Icon as={FiEdit2} />}
+                  colorScheme="green"
+                  size={buttonSize}
+                  width="100%"
+                  bg="green.500"
+                  _hover={{ bg: "green.600" }}
+                >
+                  Edit List
+                </Button>
+              </Link>
+
+              <Link to="/" style={{ width: "100%" }}>
+                <Button
+                  leftIcon={<Icon as={FiPlus} />}
+                  colorScheme="purple"
+                  size={buttonSize}
+                  width="100%"
+                  bg="purple.500"
+                  _hover={{ bg: "purple.600" }}
+                >
+                  Create New List
+                </Button>
+              </Link>
+            </Stack>
+          </VStack>
+        </Box>
+      </Container>
     </Box>
   );
 };
