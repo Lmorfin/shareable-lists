@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Input,
   Button,
@@ -50,7 +50,7 @@ const UpdateList = () => {
     setPost({ ...post, bulletpoints: newTextFields });
   };
 
-  const getList = () => {
+  const getList = useCallback(() => {
     listService
       .fetchList(uniqueIdentifier)
       .then((res) => {
@@ -67,7 +67,7 @@ const UpdateList = () => {
         });
         console.log("Error Occurred:", err);
       });
-  };
+  }, [uniqueIdentifier, toast]);
 
   const updateList = (updatedPost) => {
     if (!updatedPost.title.trim()) {
@@ -107,7 +107,7 @@ const UpdateList = () => {
 
   useEffect(() => {
     getList();
-  }, []);
+  }, [getList]);
 
   return (
     <Box bg={bgColor} minH="100vh" py={4}>

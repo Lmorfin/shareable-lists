@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import * as listService from "../services/lists.service";
 import {
   Heading,
@@ -42,11 +42,7 @@ const SharedUrl = () => {
   const buttonSize = useBreakpointValue({ base: "md", md: "lg" });
   const textSize = useBreakpointValue({ base: "sm", md: "md" });
 
-  useEffect(() => {
-    fetchListData();
-  }, []);
-
-  const fetchListData = async () => {
+  const fetchListData = useCallback(async () => {
     await listService
       .fetchList(uniqueIdentifier)
       .then((res) => {
@@ -64,7 +60,11 @@ const SharedUrl = () => {
         });
         console.log(err);
       });
-  };
+  }, [uniqueIdentifier, toast]);
+
+  useEffect(() => {
+    fetchListData();
+  }, [fetchListData]);
 
   const formatDate = (inputDate) => {
     const date = new Date(inputDate);
