@@ -3,7 +3,7 @@ const getUrlEndpoint = () => {
   if (env === "local") {
     url = "http://localhost:4000";
   } else {
-    url = "shareablelists-backend-production.up.railway.app";
+    url = "https://shareablelists-backend-production.up.railway.app";
   }
   return url;
 };
