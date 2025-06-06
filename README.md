@@ -113,7 +113,7 @@ npm start
 
 # Backend
 cd ../backend
-npm start
+node server.js
 ```
 
 ## Environment Variables
